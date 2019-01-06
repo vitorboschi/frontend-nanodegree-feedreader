@@ -75,19 +75,46 @@ $(function() {
     });
 
 
-    /* TODO: Write a new test suite named "Initial Entries" */
+    /* Test suite for the feed loader function */
+    describe('Initial Entries', function() {
 
-        /* TODO: Write a test that ensures when the loadFeed
-         * function is called and completes its work, there is at least
-         * a single .entry element within the .feed container.
-         * Remember, loadFeed() is asynchronous so this test will require
-         * the use of Jasmine's beforeEach and asynchronous done() function.
+        /* needs to use beforeEach because loadFeed is async */
+        beforeEach(function(done) {
+            loadFeed(0, done);
+        });
+
+        /* ensures that when the loadFeed function is called and completes
+         * its work, there is at least a single .entry element within the
+         * .feed container
          */
+        it('actually loads a feed', function(done) {
+            const entries = $('.feed').find('.entry');
+            expect(entries.length).toBeGreaterThan(0);
+            done();
+        });
+    });
 
-    /* TODO: Write a new test suite named "New Feed Selection" */
+    describe('New Feed Selection', function() {
+        let headerBefore = "";
+        let feedBefore = "";
 
-        /* TODO: Write a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
+        beforeEach(function(done) {
+            loadFeed(0, function() {
+                //after loading feed 0, store the values and start loading of feed 1
+                this.headerBefore = $('.header-title')[0].innerHTML;
+                this.feedBefore = $('.feed')[0].innerHTML;
+                loadFeed(1, done);
+            });
+        });
+
+
+        /* Ensures when a new feed is loaded by the loadFeed function that the
+         * content actually changes.
          */
+        it('changes the page contents', function(done) {
+            expect(this.headerBefore).not.toBe($('.header-title')[0].innerHTML);
+            expect(this.feedBefore).not.toBe($('.feed')[0].innerHTML);
+            done();
+        });
+    });
 }());
