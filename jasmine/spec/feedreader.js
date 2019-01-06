@@ -65,7 +65,7 @@ $(function() {
          * is clicked
          */
         it('toggles visibility', function() {
-            menuIcon = $('.menu-icon-link');
+            const menuIcon = $('.menu-icon-link');
             menuIcon.click();
             expect($('body').hasClass('menu-hidden')).toBeFalsy();
 
